@@ -12,12 +12,6 @@ class Bitmap
             Bitmap();
             Bitmap(string file);
             ~Bitmap();
-            int field[2];
-            int size[4];
-            int pos[4];
-            int posPict;
-            char* buff;
-            int* decbuff;
 
             void hideFile(string namefile);
             void getFile(string namefile);
@@ -35,6 +29,12 @@ class Bitmap
             void modifyChar(int value, int bit);
             void writeone(char ch, int pos);
             int getweak(int pos);
+            int field[2];
+            int size[4];
+            int pos[4];
+            int posPict;
+            char* buff;
+            int* decbuff;
 
 
 

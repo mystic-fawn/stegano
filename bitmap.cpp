@@ -173,11 +173,13 @@ void Bitmap::hideFile(string namefile)
 
     
     char ch;
+    ch = minSize;
+    writeone(ch, posPict);
 
     for(int i = 0; i < minSize; i++)
     {
         ch = file.get();
-        writeone(ch, posPict + i*8);
+        writeone(ch, posPict + 8 + i*8);
     }
 
 }
@@ -190,13 +192,31 @@ void Bitmap::getFile(string namefile)
     int repBin[8];
     int repnum;
     char chrep;
-    int size = 100;
+    int pos = posPict;
+    int size = 0;
+
+    for(int i = 0; i < 8; i++)
+    {
+        repBin[i] = getweak(pos);
+        pos++;
+    }
+    for(int i = 0; i < 8; i++)
+    {
+        int pow = 1;
+        for(int j = i; j < 7; j++)
+        {
+            pow *= 2;
+        }
+        size += repBin[i] * pow;
+    }
+
     for(int k = 0; k < size; k++)
     {
     repnum = 0;
     for(int i = 0; i < 8; i++)
     {
-        repBin[i] = getweak(posPict+ i + 8*k);
+        repBin[i] = getweak(pos);
+        pos++;
     }
     for(int i = 0; i < 8; i++)
     {
