@@ -168,18 +168,40 @@ void Bitmap::hideFile(string namefile)
     fstream file;
     file.open(namefile, ios::binary | ios::in);
     file.seekg(0, ios::end);
-    int minSize = file.tellg();
+    long minSize = file.tellg();
+    long num = minSize;
+    int binary[32];
     file.seekg(0, ios::beg);
 
-    
+    for(int i = 0; i < 32; i++)
+    {
+        /*Recuperer lq taille en bits*/
+        long pow = 1;
+        for(int j = i; j < 31;j++)
+        {
+            pow *= 2;
+        }
+        binary[i] = num / pow;
+        num %= pow;
+    }
     char ch;
-    ch = minSize;
-    writeone(ch, posPict);
+    for(int i = 3; i >= 0; i--)
+    {
+        int pow = 1;
+        num = 0;
+        for(int j = 7; j >= 0; j--)
+        {
+            num += binary[i*8 + j] * pow;
+            pow *= 2;
+        }
+        ch = num;
+        writeone(ch, posPict+(3-i)*8);
+    }
 
     for(int i = 0; i < minSize; i++)
     {
         ch = file.get();
-        writeone(ch, posPict + 8 + i*8);
+        writeone(ch, posPict + 32 + i*8);
     }
 
 }
@@ -189,25 +211,30 @@ void Bitmap::getFile(string namefile)
     fstream secret;
     secret.open(namefile, ios::binary | ios::out | ios::trunc);
     bmp.seekg(posPict, ios::beg);
-    int repBin[8];
+    int repBin[32];
     int repnum;
     char chrep;
     int pos = posPict;
-    int size = 0;
+    long size = 0;
 
-    for(int i = 0; i < 8; i++)
+    for(int i = 0; i < 32; i++)
     {
         repBin[i] = getweak(pos);
         pos++;
     }
-    for(int i = 0; i < 8; i++)
+
+    for(int i = 3; i >= 0; i--)
     {
-        int pow = 1;
-        for(int j = i; j < 7; j++)
+        /*recupere la taille d fichier cachée*/
+        for(int j = 0; j < 8; j++)
         {
-            pow *= 2;
+            long pow = 1;
+            for(int k = 7-j+i*8; k > 0; k--)
+            {
+                pow *= 2;
+            }
+            size += repBin[i*8 + j] * pow;
         }
-        size += repBin[i] * pow;
     }
 
     for(int k = 0; k < size; k++)
@@ -232,7 +259,7 @@ void Bitmap::getFile(string namefile)
     }
 }
 
-int Bitmap::getweak(int pos)
+int Bitmap::getweak(long pos)
 {
     int bit = 0;
     bmp.seekg(pos, ios::beg);
@@ -252,25 +279,30 @@ void Bitmap::Read()
     int repBin[8];
     int repnum;
     char chrep;
-    int pos = posPict;
-    int size = 0;
+    long pos = posPict;
+    long size = 0;
 
-    for(int i = 0; i < 8; i++)
+ for(int i = 0; i < 32; i++)
     {
         repBin[i] = getweak(pos);
         pos++;
     }
-    for(int i = 0; i < 8; i++)
+
+    for(int i = 3; i >= 0; i--)
     {
-        int pow = 1;
-        for(int j = i; j < 7; j++)
+        /*recupere la taille d fichier cachée*/
+        for(int j = 0; j < 8; j++)
         {
-            pow *= 2;
+            long pow = 1;
+            for(int k = 7-j+i*8; k > 0; k--)
+            {
+                pow *= 2;
+            }
+            size += repBin[i*8 + j] * pow;
         }
-        size += repBin[i] * pow;
     }
 
-    for(int k = 0; k < size; k++)
+    for(long k = 0; k < size; k++)
     {
     repnum = 0;
     for(int i = 0; i < 8; i++)

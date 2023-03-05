@@ -29,6 +29,7 @@ int main(int argc, char** argv)
     {
         bmap.set(argv[2]);
         bmap.Read();
+        cout << "good";
     }
 
     return 0;

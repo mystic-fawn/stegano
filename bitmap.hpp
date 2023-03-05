@@ -28,7 +28,7 @@ class Bitmap
         void setCursorPos(int pos);
         void modifyChar(int value, int bit);
         void writeone(char ch, int pos);
-        int getweak(int pos);
+        int getweak(long pos);
         int field[2];
         int size[4];
         int pos[4];
