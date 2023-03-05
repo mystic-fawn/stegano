@@ -245,3 +245,51 @@ int Bitmap::getweak(int pos)
     bit = num % 2;
     return bit;
 }
+
+void Bitmap::Read()
+{
+	/*print the hidden text in terminal*/
+    int repBin[8];
+    int repnum;
+    char chrep;
+    int pos = posPict;
+    int size = 0;
+
+    for(int i = 0; i < 8; i++)
+    {
+        repBin[i] = getweak(pos);
+        pos++;
+    }
+    for(int i = 0; i < 8; i++)
+    {
+        int pow = 1;
+        for(int j = i; j < 7; j++)
+        {
+            pow *= 2;
+        }
+        size += repBin[i] * pow;
+    }
+
+    for(int k = 0; k < size; k++)
+    {
+    repnum = 0;
+    for(int i = 0; i < 8; i++)
+    {
+        repBin[i] = getweak(pos);
+        pos++;
+    }
+    for(int i = 0; i < 8; i++)
+    {
+        int pow = 1;
+        for(int j = i; j < 7; j++)
+        {
+            pow *= 2;
+        }
+        repnum += repBin[i] * pow;
+    }
+    chrep = repnum;
+    cout << chrep;
+
+    }
+    cout << endl;
+}

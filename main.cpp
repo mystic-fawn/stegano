@@ -2,25 +2,12 @@
 #include <iostream>
 #include <fstream>
 
-
 string argument;
 
 int main(int argc, char** argv)
 {
-    /*Bitmap bmap;
-    if (argc <= 1)
-    {
-        bmap.set("ch1.bmp");
-    }
-    else{
-        bmap.set(argv[1]);
-    }
-
-    bmap.hideFile("hello.txt");
-    bmap.getFile("secret.txt");*/
-
     Bitmap bmap;
-    if (argc <= 3)
+    if (argc <= 2)
     {
         cout << "Need more argument" << endl;
     }
@@ -36,6 +23,12 @@ int main(int argc, char** argv)
         cout << argv[3] << " extracted from " << argv[1] << endl;
         bmap.set(argv[1]);
         bmap.getFile(argv[3]);
+    }
+    argument = argv[1];
+    if(argument == "read" || argument == "Read")
+    {
+        bmap.set(argv[2]);
+        bmap.Read();
     }
 
     return 0;
